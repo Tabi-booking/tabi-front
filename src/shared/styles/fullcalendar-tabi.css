@@ -1,0 +1,208 @@
+/* FullCalendar base + Tabi brand overrides */
+
+.tabi-calendar {
+  --fc-border-color: var(--border);
+  --fc-page-bg-color: var(--card);
+  --fc-neutral-bg-color: var(--secondary);
+  --fc-neutral-text-color: var(--muted-foreground);
+  --fc-today-bg-color: var(--card);
+  --fc-now-indicator-color: var(--tabi-coral);
+  --fc-event-border-color: transparent;
+  --fc-non-business-color: var(--card);
+  --fc-button-bg-color: var(--card);
+  --fc-button-border-color: var(--border);
+  --fc-button-text-color: var(--foreground);
+  --fc-button-hover-bg-color: var(--secondary);
+  --fc-button-hover-border-color: var(--border);
+  --fc-button-active-bg-color: var(--tabi-coral);
+  --fc-button-active-border-color: var(--tabi-coral);
+}
+
+.tabi-calendar .fc {
+  font-family: var(--font-poppins), system-ui, sans-serif;
+  color: var(--foreground);
+}
+
+.tabi-calendar .fc-toolbar {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem !important;
+}
+
+.tabi-calendar .fc-toolbar-chunk {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.tabi-calendar .fc-toolbar-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: -0.02em;
+}
+
+.tabi-calendar .fc-col-header-cell-cushion,
+.tabi-calendar .fc-timegrid-axis-cushion,
+.tabi-calendar .fc-timegrid-slot-label-cushion {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+.tabi-calendar .fc-scrollgrid {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border-color: var(--border) !important;
+}
+
+.tabi-calendar .fc-theme-standard td,
+.tabi-calendar .fc-theme-standard th {
+  border-color: var(--border);
+}
+
+.tabi-calendar .fc-timegrid-slot {
+  height: 3rem;
+}
+
+.tabi-calendar .fc-timegrid-slot-minor {
+  border-top-style: dotted;
+  border-color: color-mix(in srgb, var(--border) 60%, transparent);
+}
+
+.tabi-calendar .fc-daygrid-day-number,
+.tabi-calendar .fc-col-header-cell-cushion {
+  padding: 0.5rem;
+}
+
+.tabi-calendar .fc-day-today,
+.tabi-calendar .fc-day-today .fc-timegrid-col-frame,
+.tabi-calendar .fc-day-today .fc-daygrid-day-frame {
+  background: var(--card) !important;
+}
+
+.tabi-calendar .fc-day-today .fc-col-header-cell-cushion {
+  color: var(--tabi-coral);
+  font-weight: 600;
+}
+
+/* Toolbar buttons — match app UI */
+.tabi-calendar .fc .fc-button {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  box-shadow: none;
+  text-transform: capitalize;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.tabi-calendar .fc .fc-button:hover {
+  background: var(--secondary);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+
+.tabi-calendar .fc .fc-button:focus {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--tabi-coral) 30%, transparent);
+}
+
+.tabi-calendar .fc .fc-button-primary:not(:disabled).fc-button-active,
+.tabi-calendar .fc .fc-button-primary:not(:disabled):active {
+  background: var(--tabi-coral);
+  border-color: var(--tabi-coral);
+  color: var(--tabi-white);
+}
+
+.tabi-calendar .fc .fc-button-primary:not(:disabled).fc-button-active:hover {
+  background: color-mix(in srgb, var(--tabi-coral) 90%, black);
+}
+
+.tabi-calendar .fc .fc-button-group > .fc-button {
+  border-radius: 0;
+}
+
+.tabi-calendar .fc .fc-button-group > .fc-button:first-child {
+  border-radius: 0.625rem 0 0 0.625rem;
+}
+
+.tabi-calendar .fc .fc-button-group > .fc-button:last-child {
+  border-radius: 0 0.625rem 0.625rem 0;
+}
+
+.tabi-calendar .fc .fc-prev-button,
+.tabi-calendar .fc .fc-next-button {
+  padding-inline: 0.625rem;
+}
+
+.tabi-calendar .fc .fc-today-button {
+  color: var(--tabi-coral);
+  font-weight: 600;
+}
+
+.tabi-calendar .fc .fc-today-button:disabled {
+  opacity: 0.45;
+}
+
+/* Events */
+.tabi-calendar .fc-event {
+  border-radius: 0.375rem;
+  padding: 0.125rem 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: none;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--tabi-navy) 8%, transparent);
+  cursor: pointer;
+}
+
+.tabi-calendar .fc-event:hover {
+  filter: brightness(0.95);
+}
+
+.tabi-calendar .fc-event-title {
+  font-weight: 500;
+}
+
+.tabi-calendar .fc-timegrid-event-harness-inset .fc-timegrid-event {
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--tabi-navy) 12%, transparent);
+}
+
+.tabi-calendar .fc-v-event .fc-event-main {
+  color: inherit;
+}
+
+.tabi-calendar .fc-daygrid-day:hover {
+  background: var(--card);
+  cursor: pointer;
+}
+
+/* Now indicator */
+.tabi-calendar .fc-timegrid-now-indicator-line {
+  border-color: var(--tabi-coral);
+  border-width: 2px;
+}
+
+.tabi-calendar .fc-timegrid-now-indicator-arrow {
+  border-color: var(--tabi-coral);
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+@media (max-width: 640px) {
+  .tabi-calendar .fc-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tabi-calendar .fc-toolbar-chunk {
+    justify-content: center;
+  }
+
+  .tabi-calendar .fc-toolbar-title {
+    font-size: 1rem;
+    text-align: center;
+  }
+}

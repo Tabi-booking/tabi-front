@@ -1,0 +1,32 @@
+@import "../fc-core/mixins";
+@import "../fc-core/vars";
+
+@import "../fc-core/page-root";
+@import "../fc-core/calendar-root";
+
+@import "../fc-core/icons";
+@import "../fc-core/button";
+@import "../fc-core/button-group";
+@import "../fc-core/toolbar";
+@import "../fc-core/scroller";
+@import "../fc-core/scroller-harness";
+@import "../fc-core/scrollgrid";
+@import "../fc-core/sticky";
+@import "../fc-core/view-harness";
+@import "../fc-core/col-header";
+@import "../fc-core/bg";
+@import "../fc-core/event";
+@import "../fc-core/h-event";
+@import "../fc-core/popover";
+
+@import "../fc-daygrid/vars";
+@import "../fc-daygrid/daygrid";
+@import "../fc-daygrid/daygrid-event";
+
+@import "../fc-timegrid/constants";
+@import "../fc-timegrid/v-event";
+@import "../fc-timegrid/timegrid";
+@import "../fc-timegrid/timegrid-slots";
+@import "../fc-timegrid/timegrid-cols";
+@import "../fc-timegrid/timegrid-event";
+@import "../fc-timegrid/timegrid-now-indicator";
