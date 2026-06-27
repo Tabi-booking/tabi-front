@@ -138,17 +138,21 @@ export function ReservaFormSheet({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} className="w-full sm:max-w-lg">
-      <form onSubmit={handleSubmit((v) => mutation.mutate(v))} className="flex h-full flex-col">
-        <DrawerHeader>
-          <DrawerTitle>{isEdit ? "Editar reserva" : "Nueva reserva"}</DrawerTitle>
-          <DrawerDescription>
-            {isEdit
-              ? "Actualiza los datos de la reserva."
-              : "Registra una reserva manual en pocos pasos."}
-          </DrawerDescription>
-        </DrawerHeader>
+      <DrawerHeader>
+        <DrawerTitle>{isEdit ? "Editar reserva" : "Nueva reserva"}</DrawerTitle>
+        <DrawerDescription>
+          {isEdit
+            ? "Actualiza los datos de la reserva."
+            : "Registra una reserva manual en pocos pasos."}
+        </DrawerDescription>
+      </DrawerHeader>
 
-        <DrawerBody className="space-y-4">
+      <DrawerBody className="space-y-4">
+        <form
+          id="reserva-form"
+          onSubmit={handleSubmit((v) => mutation.mutate(v))}
+          className="space-y-4"
+        >
           <FormSection icon={User} title="Cliente" description="Busca un cliente existente o créalo al vuelo.">
             <ClienteReservaField
               clientes={clientes}
@@ -232,9 +236,10 @@ export function ReservaFormSheet({
               )}
             </div>
           </FormSection>
-        </DrawerBody>
+        </form>
+      </DrawerBody>
 
-        <DrawerFooter className="space-y-3">
+      <DrawerFooter className="space-y-3">
           {cliente && fecha && hora && (
             <div className="flex items-center justify-between gap-3 rounded-xl bg-secondary/50 px-4 py-3 text-sm">
               <div className="min-w-0">
@@ -253,6 +258,7 @@ export function ReservaFormSheet({
             </Button>
             <Button
               type="submit"
+              form="reserva-form"
               className="flex-[2]"
               disabled={!canSubmit || isSubmitting || mutation.isPending}
             >
@@ -264,7 +270,6 @@ export function ReservaFormSheet({
             </Button>
           </div>
         </DrawerFooter>
-      </form>
     </Drawer>
   );
 }

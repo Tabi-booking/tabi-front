@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Mail, Phone, Search, UserPlus, X } from "lucide-react";
 import type { Cliente } from "@/modules/clientes/types/cliente";
 import { getClienteNombre } from "@/modules/clientes/services/cliente.service";
@@ -27,8 +27,19 @@ export function ClienteReservaField({
 }: ClienteReservaFieldProps) {
   const [search, setSearch] = useState("");
   const [showCreate, setShowCreate] = useState(false);
+  const [justCreated, setJustCreated] = useState<Cliente | null>(null);
 
-  const selected = clientes.find((c) => c.ID_Key === value);
+  useEffect(() => {
+    if (!value) setJustCreated(null);
+  }, [value]);
+
+  const selected = useMemo(() => {
+    if (!value) return undefined;
+    return (
+      clientes.find((c) => c.ID_Key === value) ??
+      (justCreated?.ID_Key === value ? justCreated : undefined)
+    );
+  }, [clientes, value, justCreated]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -43,6 +54,7 @@ export function ClienteReservaField({
   }, [clientes, search]);
 
   const handleCreated = (cliente: Cliente) => {
+    setJustCreated(cliente);
     onChange(cliente.ID_Key);
     setSearch("");
     setShowCreate(false);

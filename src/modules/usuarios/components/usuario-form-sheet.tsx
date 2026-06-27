@@ -11,6 +11,7 @@ import {
   IdCard,
   KeyRound,
   Loader2,
+  Mail,
   Shield,
   UserRound,
 } from "lucide-react";
@@ -65,6 +66,90 @@ const EMPTY_VALUES: UsuarioFormValues = {
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
   return <p className="text-xs text-destructive">{message}</p>;
+}
+
+function PasswordChecklist({ password }: { password: string }) {
+  const checks = [
+    { label: "Mínimo 8 caracteres", ok: password.length >= 8 },
+    { label: "Al menos una letra", ok: /[A-Za-z]/.test(password) },
+    { label: "Al menos un número", ok: /\d/.test(password) },
+  ];
+
+  return (
+    <ul className="space-y-1 rounded-md bg-secondary/40 px-3 py-2 text-xs">
+      {checks.map((check) => (
+        <li
+          key={check.label}
+          className={cn(
+            "flex items-center gap-2",
+            check.ok ? "text-foreground" : "text-muted-foreground",
+          )}
+        >
+          <span
+            className={cn(
+              "inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold",
+              check.ok ? "bg-primary text-primary-foreground" : "bg-muted",
+            )}
+            aria-hidden
+          >
+            {check.ok ? "✓" : "·"}
+          </span>
+          {check.label}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+interface RoleCardPickerProps {
+  options: { value: string; label: string }[];
+  value: string;
+  onChange: (value: string) => void;
+  roles: { ID_Key: string; Nombre: string }[];
+}
+
+function RoleCardPicker({ options, value, onChange, roles }: RoleCardPickerProps) {
+  if (options.length === 0) return null;
+
+  if (options.length > 4) {
+    return (
+      <SelectField
+        value={value}
+        onValueChange={onChange}
+        options={options}
+        placeholder="Seleccionar rol"
+      />
+    );
+  }
+
+  return (
+    <div className="grid gap-2">
+      {options.map((option) => {
+        const role = roles.find((r) => r.ID_Key === option.value);
+        const description = getRoleDescription(role?.Nombre ?? option.label);
+        const selected = value === option.value;
+
+        return (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => onChange(option.value)}
+            className={cn(
+              "rounded-xl border px-3 py-3 text-left transition-colors",
+              selected
+                ? "border-primary bg-primary/5 ring-1 ring-primary/30"
+                : "border-border hover:border-primary/30 hover:bg-secondary/40",
+            )}
+          >
+            <p className="text-sm font-medium text-foreground">{option.label}</p>
+            {description && (
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{description}</p>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
 }
 
 function PasswordInput({
@@ -139,6 +224,10 @@ export function UsuarioFormSheet({ open, onOpenChange, usuario }: UsuarioFormShe
   });
 
   const selectedRoleId = watch("ID_Rol");
+  const password = watch("Contrasena") ?? "";
+  const nombre = watch("Nombre");
+  const apellido = watch("Apellido");
+  const correo = watch("Correo");
   const selectedRole = assignableRoles.find((r) => r.ID_Key === selectedRoleId);
   const roleDescription = getRoleDescription(selectedRole?.Nombre ?? currentRole?.Nombre);
 
@@ -246,9 +335,9 @@ export function UsuarioFormSheet({ open, onOpenChange, usuario }: UsuarioFormShe
           </FormSection>
 
           <FormSection
-            icon={IdCard}
+            icon={Mail}
             title="Contacto"
-            description="Correo y teléfono de contacto"
+            description="Correo de acceso y teléfono de contacto"
           >
             <div className="space-y-4">
               <div className="space-y-2">
@@ -276,33 +365,40 @@ export function UsuarioFormSheet({ open, onOpenChange, usuario }: UsuarioFormShe
                 />
                 <FieldError message={errors.Telefono?.message} />
               </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Tipo de documento</Label>
-                  <Controller
-                    name="Tipo_Documento"
-                    control={control}
-                    render={({ field }) => (
-                      <SelectField
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        options={DOCUMENTO_OPTIONS}
-                      />
-                    )}
-                  />
-                  <FieldError message={errors.Tipo_Documento?.message} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="Numero_Documento">Número de documento</Label>
-                  <Input
-                    id="Numero_Documento"
-                    placeholder="1234567890"
-                    inputMode="numeric"
-                    className={cn(errors.Numero_Documento && "border-destructive")}
-                    {...register("Numero_Documento")}
-                  />
-                  <FieldError message={errors.Numero_Documento?.message} />
-                </div>
+            </div>
+          </FormSection>
+
+          <FormSection
+            icon={IdCard}
+            title="Identificación"
+            description="Documento de identidad del empleado"
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label>Tipo de documento</Label>
+                <Controller
+                  name="Tipo_Documento"
+                  control={control}
+                  render={({ field }) => (
+                    <SelectField
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      options={DOCUMENTO_OPTIONS}
+                    />
+                  )}
+                />
+                <FieldError message={errors.Tipo_Documento?.message} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="Numero_Documento">Número de documento</Label>
+                <Input
+                  id="Numero_Documento"
+                  placeholder="1234567890"
+                  inputMode="numeric"
+                  className={cn(errors.Numero_Documento && "border-destructive")}
+                  {...register("Numero_Documento")}
+                />
+                <FieldError message={errors.Numero_Documento?.message} />
               </div>
             </div>
           </FormSection>
@@ -333,17 +429,17 @@ export function UsuarioFormSheet({ open, onOpenChange, usuario }: UsuarioFormShe
                     name="ID_Rol"
                     control={control}
                     render={({ field }) => (
-                      <SelectField
+                      <RoleCardPicker
                         value={field.value}
-                        onValueChange={field.onChange}
+                        onChange={field.onChange}
                         options={roleOptions}
-                        placeholder="Seleccionar rol"
+                        roles={assignableRoles}
                       />
                     )}
                   />
                 )}
                 <FieldError message={errors.ID_Rol?.message} />
-                {roleDescription && (
+                {roleOptions.length > 4 && roleDescription && (
                   <p className="rounded-md bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
                     {roleDescription}
                   </p>
@@ -382,12 +478,24 @@ export function UsuarioFormSheet({ open, onOpenChange, usuario }: UsuarioFormShe
                   {...register("ContrasenaConfirm")}
                 />
               </div>
+              {(!isEdit || password.trim()) && <PasswordChecklist password={password} />}
             </div>
           </FormSection>
         </form>
       </DrawerBody>
 
-      <DrawerFooter className="flex flex-row justify-end gap-2">
+      <DrawerFooter className="flex flex-col gap-3">
+        {!isEdit && nombre && apellido && correo && selectedRole && (
+          <div className="w-full rounded-xl bg-secondary/50 px-4 py-3 text-sm">
+            <p className="font-medium">
+              {nombre} {apellido}
+            </p>
+            <p className="text-muted-foreground">
+              {correo} · Rol: {selectedRole.Nombre}
+            </p>
+          </div>
+        )}
+        <div className="flex w-full flex-row justify-end gap-2">
         <Button
           type="button"
           variant="outline"
@@ -412,6 +520,7 @@ export function UsuarioFormSheet({ open, onOpenChange, usuario }: UsuarioFormShe
             "Crear empleado"
           )}
         </Button>
+        </div>
       </DrawerFooter>
     </Drawer>
   );

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Users, Search } from "lucide-react";
+import { Users, Search, Mail, Phone, IdCard, CalendarDays } from "lucide-react";
 import {
   eliminarCliente,
   fetchClienteByDocumento,
@@ -22,7 +22,7 @@ import { EmptyState } from "@/shared/components/patterns/empty-state";
 import { TableSkeleton } from "@/shared/components/patterns/table-skeleton";
 import { Button } from "@/shared/components/native/button";
 import { Input } from "@/shared/components/native/input";
-import { Drawer, DrawerBody, DrawerHeader, DrawerTitle } from "@/shared/components/native/drawer";
+import { Drawer, DrawerBody, DrawerDescription, DrawerHeader, DrawerTitle } from "@/shared/components/native/drawer";
 import { formatDate, formatTime } from "@/shared/lib/utils";
 import { PermissionDenied } from "@/shared/components/patterns/permission-denied";
 import { usePermissions } from "@/shared/hooks/use-permissions";
@@ -51,35 +51,65 @@ function ClienteProfileSheet({
   return (
     <Drawer open={open} onOpenChange={onOpenChange} className="w-full sm:max-w-md">
       <DrawerHeader>
-        <DrawerTitle>{getClienteNombre(cliente)}</DrawerTitle>
+        <div className="flex items-center gap-3 pr-8">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-base font-semibold text-primary-foreground">
+            {cliente.Nombre.charAt(0)}
+            {cliente.Apellido.charAt(0)}
+          </div>
+          <div className="min-w-0">
+            <DrawerTitle className="truncate">{getClienteNombre(cliente)}</DrawerTitle>
+            <DrawerDescription>Perfil y historial de visitas</DrawerDescription>
+          </div>
+        </div>
       </DrawerHeader>
       <DrawerBody>
-        <div className="space-y-4">
-          <div className="space-y-1 text-sm">
-            <p>
-              <span className="text-muted-foreground">Correo:</span> {cliente.Correo}
-            </p>
-            <p>
-              <span className="text-muted-foreground">Teléfono:</span> {cliente.Telefono}
-            </p>
-            <p>
-              <span className="text-muted-foreground">Documento:</span> {cliente.Tipo_Documento}{" "}
-              {cliente.Numero_Documento}
-            </p>
+        <div className="space-y-5">
+          <div className="grid gap-3">
+            <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3 text-sm">
+              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Correo</p>
+                <p className="mt-0.5 break-all">{cliente.Correo || "—"}</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3 text-sm">
+              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Teléfono</p>
+                <p className="mt-0.5">{cliente.Telefono || "—"}</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3 text-sm">
+              <IdCard className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Documento</p>
+                <p className="mt-0.5">
+                  {cliente.Tipo_Documento} {cliente.Numero_Documento}
+                </p>
+              </div>
+            </div>
           </div>
+
           <Button variant="outline" size="sm" onClick={onEdit}>
             Editar perfil
           </Button>
-          <div>
-            <h4 className="mb-2 text-sm font-semibold">Historial de reservas</h4>
+
+          <div className="rounded-xl border border-border bg-card p-4">
+            <div className="mb-3 flex items-center gap-2">
+              <CalendarDays className="h-4 w-4 text-primary" />
+              <h4 className="text-sm font-semibold">Historial de reservas</h4>
+            </div>
             {historial.length === 0 ? (
               <p className="text-sm text-muted-foreground">Sin reservas registradas.</p>
             ) : (
               <ul className="space-y-2">
                 {historial.map((r) => (
-                  <li key={r.ID_Key} className="flex items-center justify-between rounded-md border border-border p-3 text-sm">
+                  <li
+                    key={r.ID_Key}
+                    className="flex items-center justify-between rounded-lg border border-border bg-background p-3 text-sm"
+                  >
                     <div>
-                      <p>{formatDate(r.Fecha)} · {formatTime(r.Hora)}</p>
+                      <p className="font-medium">{formatDate(r.Fecha)} · {formatTime(r.Hora)}</p>
                       <p className="text-muted-foreground">{r.Cantidad_personas} personas</p>
                     </div>
                     <EstadoReservaBadge estado={r.Estado} />
